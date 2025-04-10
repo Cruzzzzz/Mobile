@@ -1,16 +1,25 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuMananger : MonoBehaviour
 {
-public void Play()
+    [SerializeField] private GameObject PainelMenuInicial;
+    [SerializeField] private GameObject PainelOpcoes;
+    public void Play()
     {
-
+        SceneManager.LoadScene("Fase1");
     }
-public void Options()
+    public void AbrirOpções()
     {
-
+        PainelMenuInicial.SetActive(false);
+        PainelOpcoes.SetActive(true);
     }
-public void Quit()
+    public void FecharOpções()
+    {
+        PainelOpcoes.SetActive(false);
+        PainelMenuInicial.SetActive(true);
+    }
+    public void Quit()
     {
         Application.Quit();
     }
