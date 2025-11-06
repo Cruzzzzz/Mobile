@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
         currentTime = totalGameTime;
         areaManager.ChangeArea(0);
     }
-
+   
     private void Update()
     {
         currentTime -= Time.deltaTime;
