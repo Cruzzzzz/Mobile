@@ -84,5 +84,3 @@ public class GameManager : MonoBehaviour
 
     public float GetCurrentTime() => currentTime;
 }
-
-

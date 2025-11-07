@@ -6,26 +6,32 @@ public class SaveSystem : MonoBehaviour, ISavable
 
     private void Start()
     {
-        currencyManager = FindObjectOfType<CurrencyManager>();
-        LoadData();
+        // Pega o gerenciador de moedas da cena
+        currencyManager = Object.FindFirstObjectByType<CurrencyManager>();
+
+        // Zera as moedas ao iniciar a cena
+        if (currencyManager != null)
+        {
+            currencyManager.SetCoins(0);
+            Debug.Log("[SaveSystem] Moedas resetadas ao iniciar a Fase1");
+        }
     }
 
     public void SaveData()
     {
-        PlayerPrefs.SetInt("Coins", currencyManager.GetCoins());
-        PlayerPrefs.Save();
+        // Não salva mais nada (porque tu quer resetar sempre)
     }
 
     public void LoadData()
     {
-        int savedCoins = PlayerPrefs.GetInt("Coins", 0);
-        for (int i = 0; i < savedCoins; i++)
-            currencyManager.AddCoins(1);
+        // Também não carrega nada (começa zerado sempre)
     }
 
     private void OnApplicationQuit()
     {
-        SaveData();
+        // Nem precisa salvar aqui mais
     }
 }
+
+
 

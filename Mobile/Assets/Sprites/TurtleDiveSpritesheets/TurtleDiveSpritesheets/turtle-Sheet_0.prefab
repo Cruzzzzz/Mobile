@@ -174,5 +174,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   value: 1
-  speed: 1.5
+  speed: 3
   catchSound: {fileID: 0}

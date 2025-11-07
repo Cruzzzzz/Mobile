@@ -5,6 +5,12 @@ public class CurrencyManager : MonoBehaviour
 {
     [SerializeField] private int coins = 0;
     [SerializeField] private TextMeshProUGUI coinText;
+    public void SetCoins(int amount)
+    {
+        coins = amount;
+        UpdateUI();
+    }
+
 
     public void AddCoins(int amount)
     {
