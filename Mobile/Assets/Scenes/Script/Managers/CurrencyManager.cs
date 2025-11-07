@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
 public class CurrencyManager : MonoBehaviour
 {
     [SerializeField] private int coins = 0;
-    [SerializeField] private Text coinText;
+    [SerializeField] private TextMeshProUGUI coinText;
 
     public void AddCoins(int amount)
     {

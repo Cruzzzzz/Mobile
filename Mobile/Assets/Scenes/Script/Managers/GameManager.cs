@@ -1,20 +1,19 @@
 using UnityEngine;
-using UnityEngine.UI;
+using TMPro; // Importa o TextMeshPro
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private float totalGameTime = 180f; // 3 minutos
-    [SerializeField] private Text timerText;
-    [SerializeField] private AreaManager areaManager;
+    [SerializeField] private TextMeshProUGUI timerText; // Alterado pra TMP
+
     private float currentTime;
 
     private void Start()
     {
         currentTime = totalGameTime;
-        areaManager.ChangeArea(0);
     }
-   
+
     private void Update()
     {
         currentTime -= Time.deltaTime;
@@ -24,7 +23,5 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene("Menu");
         }
-
-        areaManager.UpdateAreaByTime(totalGameTime - currentTime);
     }
 }
