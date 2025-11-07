@@ -1,19 +1,40 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class ShopManager : MonoBehaviour
 {
-    [SerializeField] private CurrencyManager currencyManager;
-    [SerializeField] private Button adButton;
-    [SerializeField] private int adReward = 50;
+    [SerializeField] private string shopSceneName = "Shop";
 
-    public void BuyItem(int price)
+    public void OpenShop()
     {
-        currencyManager.SpendCoins(price);
+        if (GameManager.Instance != null)
+            GameManager.Instance.PauseGameAndSave();
+
+        SceneManager.LoadSceneAsync(shopSceneName, LoadSceneMode.Additive);
     }
 
-    public void GetAdReward()
+    public void CloseShop()
     {
-        currencyManager.AddCoins(adReward);
+        SceneManager.UnloadSceneAsync(shopSceneName).completed += (op) =>
+        {
+            if (GameManager.Instance != null)
+                GameManager.Instance.ResumeGame();
+        };
+    }
+
+    public void OpenShop_FullScene()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.PauseGameAndSave();
+
+        SceneManager.LoadSceneAsync(shopSceneName);
+    }
+
+    public void BackToGameplay_FullScene()
+    {
+        SceneManager.LoadSceneAsync("Fase1");
+        // o GameManager persiste e volta automaticamente a rodar
     }
 }
+
+
