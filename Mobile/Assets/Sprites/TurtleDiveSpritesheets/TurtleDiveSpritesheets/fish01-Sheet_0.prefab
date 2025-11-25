@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6789777689908672007}
   - component: {fileID: -6798630957043848940}
   - component: {fileID: 1142757646573684666}
+  - component: {fileID: -8003316861383604879}
   m_Layer: 0
   m_Name: fish01-Sheet_0
   m_TagString: Untagged
@@ -174,5 +175,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Fish
   value: 1
-  speed: 3
+  speed: 4.5
   catchSound: {fileID: 0}
+--- !u!114 &-8003316861383604879
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5698604798303904412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82efb3b99b1ec944fbc75573bc0200ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DestroyOnExit
