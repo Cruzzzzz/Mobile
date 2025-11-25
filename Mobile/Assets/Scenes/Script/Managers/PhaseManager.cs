@@ -8,7 +8,13 @@ public class PhaseManager : MonoBehaviour
     public void ChangePhase(int index)
     {
         currentPhase = index;
-        Fish.speed = phases[index].fishSpeed;
+
+        // Novo jeito recomendado pelo Unity
+        Fish[] allFish = FindObjectsByType<Fish>(FindObjectsSortMode.None);
+
+        Fish.globalSpeed = phases[index].fishSpeed;
+
+
     }
 }
 

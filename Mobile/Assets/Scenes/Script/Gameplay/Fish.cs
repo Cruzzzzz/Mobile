@@ -4,6 +4,7 @@ public class Fish : MonoBehaviour, ICollectable
 {
     [SerializeField] private int value = 1;
     [SerializeField] private float speed = 1.5f;
+    public static float globalSpeed;
     [SerializeField] private AudioClip catchSound;
 
 
@@ -14,7 +15,8 @@ private CurrencyManager currencyManager;
 
     private void Start()
     {
-   
+        globalSpeed = speed;
+
         currencyManager = FindFirstObjectByType<CurrencyManager>();
         soundManager = FindFirstObjectByType<SoundManager>();
 
@@ -24,7 +26,8 @@ private CurrencyManager currencyManager;
     private void Update()
     {
         if (!collected)
-            transform.Translate(Vector2.left * speed * Time.deltaTime);
+            transform.Translate(Vector2.left * globalSpeed * Time.deltaTime);
+
     }
 
     private void OnMouseDown()
@@ -55,6 +58,11 @@ private CurrencyManager currencyManager;
             Destroy(gameObject);
         }
     }
+    private void OnBecameInvisible()
+    {
+        Destroy(gameObject);
+    }
+
 
 }
 
