@@ -1,7 +1,7 @@
 [System.Serializable]
 public class PhaseData
 {
-    public string name;
+    public string phaseName;
     public float fishSpeed;
 }
 
