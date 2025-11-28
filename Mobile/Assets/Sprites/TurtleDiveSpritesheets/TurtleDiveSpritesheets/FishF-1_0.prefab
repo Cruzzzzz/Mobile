@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 3846671701795568582}
   - component: {fileID: 407039239871254521}
   - component: {fileID: 7274861184905634463}
-  - component: {fileID: -8310911581562374995}
   m_Layer: 0
   m_Name: FishF-1_0
   m_TagString: Untagged
@@ -80,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 94249405
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -1393276595869092296, guid: caf62b8a7bf0f52448ebbd5febd7461b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -177,15 +176,3 @@ MonoBehaviour:
   value: 30
   speed: 4.5
   catchSound: {fileID: 0}
---- !u!114 &-8310911581562374995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2840117634475716507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82efb3b99b1ec944fbc75573bc0200ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DestroyOnExit
