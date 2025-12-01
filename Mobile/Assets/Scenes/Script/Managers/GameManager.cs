@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         currentTime = PlayerPrefs.GetFloat("SavedTime", totalGameTime);
+        ScoreManager.LoadScore();
         isPaused = false;
         Time.timeScale = 1f;
         UpdateTimerTextImmediate();

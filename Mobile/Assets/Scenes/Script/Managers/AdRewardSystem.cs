@@ -1,206 +1,112 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using System.Collections;
 
-/// <summary>
-/// Sistema de anúncios com recompensa para jogo de pesca 2D mobile
-/// Gerencia a exibição de anúncios, timer de 10 segundos e recompensa de 30 pontos
-/// </summary>
 public class AdRewardSystem : MonoBehaviour
 {
-    [Header("Configurações de Recompensa")]
-    [SerializeField] private int rewardPoints = 30;
-    [SerializeField] private float adDuration = 10f;
-
-    [Header("Referências UI")]
-    [SerializeField] private Button adButton;
+    [Header("UI Panels")]
+    [SerializeField] private GameObject shopPanel;
     [SerializeField] private GameObject adPanel;
-    [SerializeField] private Text timerText;
+
+    [Header("Buttons")]
+    [SerializeField] private Button rewardButton;
     [SerializeField] private Button closeAdButton;
 
-    [Header("Sistema de Pontos")]
-    [SerializeField] private Text pointsText;
-    private int currentPoints = 0;
+    [Header("Counter TMP")]
+    [SerializeField] private TMP_Text contadorTMP;
 
-    private bool isWatchingAd = false;
-    private float currentAdTime = 0f;
+    [Header("Reward")]
+    [SerializeField] public int rewardAmount = 30;
+    [SerializeField] private int adSeconds = 10;
+
+    private Coroutine adCoroutine;
+    private bool rewarded = false;
 
     private void Start()
     {
-        // Configurar listeners dos botões
-        if (adButton != null)
-        {
-            adButton.onClick.AddListener(OnAdButtonClicked);
-        }
+        // Painel do ad começa DESATIVADO
+        adPanel.SetActive(false);
 
-        if (closeAdButton != null)
-        {
-            closeAdButton.onClick.AddListener(OnCloseAdButtonClicked);
-            closeAdButton.interactable = false; // Desabilitar até o timer acabar
-        }
+        // Botão de fechar escondido no começo
+        closeAdButton.gameObject.SetActive(false);
 
-        // Esconder painel de anúncio no início
-        if (adPanel != null)
-        {
-            adPanel.SetActive(false);
-        }
+        contadorTMP.text = "";
 
-        // Atualizar display de pontos
-        UpdatePointsDisplay();
+        rewardButton.onClick.AddListener(OnRewardClicked);
+        closeAdButton.onClick.AddListener(OnCloseAdClicked);
     }
 
-    /// <summary>
-    /// Chamado quando o jogador clica no botão de anúncio
-    /// </summary>
-    private void OnAdButtonClicked()
+    private void OnRewardClicked()
     {
-        if (isWatchingAd)
-            return;
+        // Abre painel do ad
+        adPanel.SetActive(true);
 
-        StartAd();
+        // Esconde botão de fechar até acabar o tempo
+        closeAdButton.gameObject.SetActive(false);
+
+        // Mostra contador
+        contadorTMP.gameObject.SetActive(true);
+
+        rewarded = false;
+
+        // Reinicia coroutine se tiver uma rodando
+        if (adCoroutine != null)
+            StopCoroutine(adCoroutine);
+
+        adCoroutine = StartCoroutine(AdTimer());
     }
 
-    /// <summary>
-    /// Inicia a exibição do anúncio
-    /// </summary>
-    private void StartAd()
+    private IEnumerator AdTimer()
     {
-        isWatchingAd = true;
-        currentAdTime = adDuration;
+        int t = adSeconds;
 
-        // Mostrar painel de anúncio
-        if (adPanel != null)
+        while (t > 0)
         {
-            adPanel.SetActive(true);
+            contadorTMP.text = t.ToString();
+            yield return new WaitForSecondsRealtime(1f);
+            t--;
         }
 
-        // Desabilitar botão de fechar
-        if (closeAdButton != null)
+        contadorTMP.text = "Pronto!";
+
+        // Agora sim mostra o botão de fechar
+        closeAdButton.gameObject.SetActive(true);
+
+        // Dá a recompensa
+        if (!rewarded)
         {
-            closeAdButton.interactable = false;
+            rewarded = true;
+            GiveReward();
         }
 
-        // Iniciar corrotina do timer
-        StartCoroutine(AdTimerCoroutine());
+        adCoroutine = null;
     }
 
-    /// <summary>
-    /// Corrotina que gerencia o timer do anúncio
-    /// </summary>
-    private IEnumerator AdTimerCoroutine()
+    public void GiveReward()
     {
-        while (currentAdTime > 0)
-        {
-            // Atualizar texto do timer
-            if (timerText != null)
-            {
-                timerText.text = $"Anúncio: {Mathf.Ceil(currentAdTime)}s";
-            }
-
-            yield return new WaitForSeconds(1f);
-            currentAdTime -= 1f;
-        }
-
-        // Timer acabou
-        OnAdCompleted();
+        ScoreManager.AddScore(rewardAmount);
+        Debug.Log("Reward dado! Pontos atuais: " + ScoreManager.currentScore);
     }
 
-    /// <summary>
-    /// Chamado quando o anúncio é completado (timer chegou a 0)
-    /// </summary>
-    private void OnAdCompleted()
+    private void OnCloseAdClicked()
     {
-        // Dar recompensa ao jogador
-        AddPoints(rewardPoints);
-
-        // Atualizar UI
-        if (timerText != null)
+        // Para coroutine caso ainda exista
+        if (adCoroutine != null)
         {
-            timerText.text = $"+{rewardPoints} pontos!";
+            StopCoroutine(adCoroutine);
+            adCoroutine = null;
         }
 
-        // Habilitar botão de fechar
-        if (closeAdButton != null)
-        {
-            closeAdButton.interactable = true;
-        }
+        // Some painel do ad
+        adPanel.SetActive(false);
 
-        isWatchingAd = false;
+        // Some botão e texto
+        closeAdButton.gameObject.SetActive(false);
+        contadorTMP.text = "";
 
-        // Feedback visual/sonoro (opcional)
-        Debug.Log($"Anúncio completado! Recompensa: {rewardPoints} pontos");
-    }
-
-    /// <summary>
-    /// Chamado quando o jogador clica no botão de fechar anúncio
-    /// </summary>
-    private void OnCloseAdButtonClicked()
-    {
-        if (adPanel != null)
-        {
-            adPanel.SetActive(false);
-        }
-
-        // Resetar texto do timer
-        if (timerText != null)
-        {
-            timerText.text = "";
-        }
-    }
-
-    /// <summary>
-    /// Adiciona pontos ao jogador
-    /// </summary>
-    /// <param name="points">Quantidade de pontos a adicionar</param>
-    public void AddPoints(int points)
-    {
-        currentPoints += points;
-        UpdatePointsDisplay();
-        
-        // Salvar pontos (opcional - usar PlayerPrefs ou sistema de save)
-        PlayerPrefs.SetInt("PlayerPoints", currentPoints);
-        PlayerPrefs.Save();
-    }
-
-    /// <summary>
-    /// Atualiza o display de pontos na UI
-    /// </summary>
-    private void UpdatePointsDisplay()
-    {
-        if (pointsText != null)
-        {
-            pointsText.text = $"Pontos: {currentPoints}";
-        }
-    }
-
-    /// <summary>
-    /// Carrega os pontos salvos
-    /// </summary>
-    public void LoadPoints()
-    {
-        currentPoints = PlayerPrefs.GetInt("PlayerPoints", 0);
-        UpdatePointsDisplay();
-    }
-
-    /// <summary>
-    /// Retorna a quantidade atual de pontos
-    /// </summary>
-    public int GetCurrentPoints()
-    {
-        return currentPoints;
-    }
-
-    private void OnDestroy()
-    {
-        // Remover listeners ao destruir o objeto
-        if (adButton != null)
-        {
-            adButton.onClick.RemoveListener(OnAdButtonClicked);
-        }
-
-        if (closeAdButton != null)
-        {
-            closeAdButton.onClick.RemoveListener(OnCloseAdButtonClicked);
-        }
+        // Volta pra loja
+        if (shopPanel != null)
+            shopPanel.SetActive(true);
     }
 }
